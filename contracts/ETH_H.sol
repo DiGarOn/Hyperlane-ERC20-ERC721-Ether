@@ -1,19 +1,20 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
 import { IMailbox } from "../interfaces/IMailbox.sol";
 
 import "hardhat/console.sol";
 
-contract SepoliaToken is ERC20 {
+contract ETH_H {
     IMailbox mailBox;
 
-    constructor (string memory name_, string memory symbol_, uint256 init_supply, address mailBox_) ERC20( name_, symbol_ ) {
-        _mint(msg.sender, init_supply);
+    event Transfered(uint256 amount);
+
+    constructor (address mailBox_) payable {
         mailBox = IMailbox(mailBox_);
     }
+
+    receive() external payable {}
 
     function addressToBytes32(address _addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(_addr)));
@@ -28,16 +29,21 @@ contract SepoliaToken is ERC20 {
         return (b, c);
     }
 
+    function calcFee(uint32 destination, address recipient_, uint256 amount) external view returns (uint256) {
+        bytes32 _recipient = addressToBytes32(recipient_);
+        bytes memory body = uint_to_bytes(amount, msg.sender);
+        uint256 fee = mailBox.quoteDispatch(destination, _recipient, body);
+        return fee;
+    }
+
     function remoteTransfer(uint32 destination, address recipient_, uint256 amount) external payable {
-        require(balanceOf(msg.sender) >= amount, "Not enough balance of token");
         bytes32 _recipient = addressToBytes32(recipient_);
         bytes memory body = uint_to_bytes(amount, msg.sender);
         uint256 fee = mailBox.quoteDispatch(destination, _recipient, body);
         console.log("fee is: ", fee);
-        require(msg.value >= fee);
-        _burn(msg.sender, amount);
+        require(msg.value >= fee + amount);
+        emit Transfered(amount);
         mailBox.dispatch{value: fee}(destination, _recipient, body);
-        payable(msg.sender).transfer(address(this).balance);
     }
 
     function handle(
@@ -50,6 +56,7 @@ contract SepoliaToken is ERC20 {
     ) external {
         require(address(mailBox) == msg.sender);
         (uint256 amount, address recipient) = bytes_to_uint(body);
-        _mint(recipient, amount);
+        require(address(this).balance >= amount);
+        payable(recipient).transfer(amount);
     }
 }
