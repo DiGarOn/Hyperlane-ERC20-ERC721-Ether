@@ -19,11 +19,11 @@ contract ERC721_H is ERC721 {
         return bytes32(uint256(uint160(_addr)));
     }
 
-    function uint_to_bytes(uint256 a, address b) internal view returns (bytes memory) {
+    function uint_to_bytes(uint256 a, address b) internal pure returns (bytes memory) {
         return abi.encode(a, b);
     }
 
-    function bytes_to_uint(bytes memory a) internal view returns (uint256, address) {
+    function bytes_to_uint(bytes memory a) internal pure returns (uint256, address) {
         (uint256 b, address c ) = abi.decode(a, (uint256, address));
         return (b, c);
     }
@@ -37,7 +37,9 @@ contract ERC721_H is ERC721 {
         require(msg.value >= fee);
         _burn(tokenId);
         mailBox.dispatch{value: fee}(destination, _recipient, body);
-        payable(msg.sender).transfer(address(this).balance);
+        if(address(this).balance > 0) {
+            payable(msg.sender).transfer(address(this).balance);
+        }
     }
 
     function handle(
