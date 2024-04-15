@@ -21,19 +21,27 @@ async function main() {
   const polygon = "0x5d934f4e2f797775e53561bB72aca21ba36B96BB"
   const scroll = "0x2f2aFaE1139Ce54feFC03593FeE8AB2aDF4a85A7"
   const ethereum = "0xc005dc82818d67AF737725bD4bf75435d065D239"
+// chainIds:
+  const optimism_chainId = 10
+  const base_chainId = 8453
+  const celo_chainId = 42220
+  const avalanche_chainId = 43114
+  const polygon_zkEVM_chainId = 1101
+  const bsc_chainId = 56
+  const moonbeam_chainId = 1284
+  const gnosis_chainId = 100
+  const arbitrum_chainId = 42161
+  const polygon_chainId = 137
+  const scroll_chainId = 534352
+  const ethereum_chainId = 1
 
 // Деплой: Параметры: (название токена, символ токена, первонаальный минт владельцу, адрес MailBox для нужной сети)
   const contract = await Token.deploy("token_", "ST", 1000000000000000n, optimism); // или любой дрйго адрес из указанных выше
 
-  // const contract = await Token.deploy("token_", "ST", 1000000000000000n, "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766"); // sepolia
-  // const contract = await Token.deploy("token_", "ST", 1000000000000000n, "0xF9F6F5646F478d5ab4e20B0F910C92F1CCC9Cc6D"); // bnbtest
-  // const contract = await Token.attach("0x1c0e9E0C70d7F2F9d3c4Ee4FcDb8b1E53BEa1704"); // sepolia
-  // const contract = Token.attach("0x0Fe0Cef42a6023ed8b06985bcf9385d2AF0F56e0"); // bnbtest
   console.log("Contract address:", contract.target);
 
-// Пример вызова: (2й параметр - адрес этого токена в нужной сети, в данной ситуации в 97)
-  // await contract.connect(deployer).remoteTransfer(97,"0x0Fe0Cef42a6023ed8b06985bcf9385d2AF0F56e0", 1000, {value: ethers.parseEther("0.005")});
-  // await contract.connect(deployer).remoteTransfer(11155111,"0x1c0e9E0C70d7F2F9d3c4Ee4FcDb8b1E53BEa1704", 1000, {value: ethers.parseEther("0.005")});
+// Пример вызова: (2й параметр - адрес этого токена в нужной сети, в данной ситуации в optimism_chainId)
+  // await contract.connect(deployer).remoteTransfer(optimism_chainId,"0x0Fe0Cef42a6023ed8b06985bcf9385d2AF0F56e0", 1000, {value: ethers.parseEther("0.005")});
   console.log(await contract.connect(deployer).balanceOf(deployer.address));
 }
 
