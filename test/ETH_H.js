@@ -23,6 +23,9 @@ async function main() {
 // Деплой: Параметры: (адрес MailBox для нужной сети, id сети)
   const contract = await Token.deploy(polygon, polygon_chainId, {value: ethers.parseEther("0.005")});
 
+// после деплоя для работы с контрактом
+  // const contract = await Token.attach("<token address>");
+
   console.log("Contract address:", contract.target);
 
   // пример вызова без работы с полигоном. Параметры: id сети, адрес контракта в нужной сети, количество для перевода, любые значнения, я поставил 0

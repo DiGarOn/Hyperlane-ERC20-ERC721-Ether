@@ -38,6 +38,9 @@ async function main() {
 // Деплой: Параметры: (название токена, символ токена, первонаальный минт владельцу, адрес MailBox для нужной сети)
   const contract = await Token.deploy("token_", "ST", 1000000000000000n, optimism); // или любой дрйго адрес из указанных выше
 
+// после деплоя для работы с контрактом
+  // const contract = await Token.attach("<token address>");
+
   console.log("Contract address:", contract.target);
 
 // Пример вызова: (2й параметр - адрес этого токена в нужной сети, в данной ситуации в optimism_chainId)
