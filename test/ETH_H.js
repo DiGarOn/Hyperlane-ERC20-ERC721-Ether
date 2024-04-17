@@ -28,24 +28,24 @@ async function main() {
 
   console.log("Contract address:", contract.target);
 
-  // пример вызова без работы с полигоном. Параметры: id сети, адрес контракта в нужной сети, количество для перевода, любые значнения, я поставил 0
-  await contract.connect(deployer).remoteTransfer(scroll_chainId,"0xBD6cCCBb8E4D6457e58953D1b3f1aA4D8f2522cC", 1000, 0, 0, "0", {value: ethers.parseEther("0.005")}); // sepolia
+//   // пример вызова без работы с полигоном. Параметры: id сети, адрес контракта в нужной сети, количество для перевода, любые значнения, я поставил 0
+//   await contract.connect(deployer).remoteTransfer(scroll_chainId,"0xBD6cCCBb8E4D6457e58953D1b3f1aA4D8f2522cC", 1000, 0, 0, "0", {value: ethers.parseEther("0.005")}); // sepolia
 
-// пример создания подписи (она может быть выложена на сайт вместе с соотношением matic/eth)
-  const maticToEth = 222522764413594n; // соотношение
-  const hash = ethers.utils.solidityKeccak256(
-    ["uint256"],
-    [maticToEth]
-  );
+// // пример создания подписи (она может быть выложена на сайт вместе с соотношением matic/eth)
+//   const maticToEth = 222522764413594n; // соотношение
+//   const hash = ethers.utils.solidityKeccak256(
+//     ["uint256"],
+//     [maticToEth]
+//   );
 
-  const messageHashBin = ethers.utils.arrayify(hash);
-  const signature = await deployer.signMessage(messageHashBin); // важно, что подпись происходит ончейн!
+//   const messageHashBin = ethers.utils.arrayify(hash);
+//   const signature = await deployer.signMessage(messageHashBin); // важно, что подпись происходит ончейн!
 
-// пример вызова функции при работе с полигоном (отправка с или на полигон)
-// параметры: id сети, адрес контракта в сети, объем, соотношение, подпись
-  await contract.connect(deployer).remoteTransfer(polygon_chainId,"0xBD6cCCBb8E4D6457e58953D1b3f1aA4D8f2522cC", 1000, maticToEth, signature, {value: ethers.parseEther("0.005")}); // sepolia
+// // пример вызова функции при работе с полигоном (отправка с или на полигон)
+// // параметры: id сети, адрес контракта в сети, объем, соотношение, подпись
+//   await contract.connect(deployer).remoteTransfer(polygon_chainId,"0xBD6cCCBb8E4D6457e58953D1b3f1aA4D8f2522cC", 1000, maticToEth, signature, {value: ethers.parseEther("0.005")}); // sepolia
 
-  console.log(await provider.getBalance("0x095454F216EC9485da86D49aDffAcFD0Fa3e5BE5"));
+//   console.log(await provider.getBalance("0x095454F216EC9485da86D49aDffAcFD0Fa3e5BE5"));
 }
 
 main()

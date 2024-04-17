@@ -44,7 +44,7 @@ async function main() {
 
 // Пример вызова: (2й параметр - адрес этого токена в нужной сети, в данной ситуации в optimism_chainId)
   // await contract.connect(deployer).remoteTransfer(optimism_chainId,"0xC05FA16AeF1f71a95939F120f4dC1E1581858300", 1000, {value: ethers.parseEther("0.005")});
-  console.log(await contract.connect(deployer).balanceOf(deployer.address));
+  // console.log(await contract.connect(deployer).balanceOf(deployer.address));
 }
 
 main()
