@@ -29,7 +29,7 @@ async function main() {
   console.log("Contract address:", contract.target);
 
 //   // пример вызова без работы с полигоном. Параметры: id сети, адрес контракта в нужной сети, количество для перевода, любые значнения, я поставил 0
-//   await contract.connect(deployer).remoteTransfer(scroll_chainId,"0xBD6cCCBb8E4D6457e58953D1b3f1aA4D8f2522cC", 1000, 0, 0, "0", {value: ethers.parseEther("0.005")}); // sepolia
+//   await contract.connect(deployer).remoteTransfer(scroll_chainId,"0xBD6cCCBb8E4D6457e58953D1b3f1aA4D8f2522cC", 1000, 0, "0", {value: ethers.parseEther("0.005")}); // sepolia
 
 // // пример создания подписи (она может быть выложена на сайт вместе с соотношением matic/eth)
 //   const maticToEth = 222522764413594n; // соотношение
