@@ -36,16 +36,22 @@ async function main() {
   const ethereum_chainId = 1
 
 // Деплой: Параметры: (название токена, символ токена, первонаальный минт владельцу, адрес MailBox для нужной сети)
-  const contract = await Token.deploy("token_", "ST", 1000000000000000n, optimism); // или любой дрйго адрес из указанных выше
-
+  // const contract = await Token.deploy("token_", "ST", 1000000000000000n, optimism); // или любой дрйго адрес из указанных выше
+  // const contract = await Token.deploy("token_", "ST", 1000000000000000n, "0xfFAEF09B3cd11D9b20d1a19bECca54EEC2884766"); // sepolia; 11155111
+  // const contract = await Token.deploy("token_", "ST", 1000000000000000n, "0xF9F6F5646F478d5ab4e20B0F910C92F1CCC9Cc6D"); // bnb test; 97
 // после деплоя для работы с контрактом
-  // const contract = await Token.attach("<token address>");
+  // const contract = await Token.attach("0x3E93718A32dAc441B3B70Fc69C4732Fe697EB6ef"); // bnbt
+  const contract = await Token.attach("0xF6759319c5A69fDEdaB831b7C124A08914CDbc99"); // sepolia
 
   console.log("Contract address:", contract.target);
 
+// добавляем адреса токенов в whitelist для безопасного взаимодействия
+  // await contract.connect(deployer).addWhitelisted(["0x3E93718A32dAc441B3B70Fc69C4732Fe697EB6ef"]);
+
 // Пример вызова: (2й параметр - адрес этого токена в нужной сети, в данной ситуации в optimism_chainId)
   // await contract.connect(deployer).remoteTransfer(optimism_chainId,"0x0Fe0Cef42a6023ed8b06985bcf9385d2AF0F56e0", 1000, {value: ethers.parseEther("0.005")});
-  // console.log(await contract.connect(deployer).balanceOf(deployer.address));
+  console.log(await contract.connect(deployer).balanceOf(deployer.address));
+  // await contract.connect(deployer).remoteTransfer(11155111,"0xF6759319c5A69fDEdaB831b7C124A08914CDbc99", 1000, {value: ethers.parseEther("0.005")});
 }
 
 main()

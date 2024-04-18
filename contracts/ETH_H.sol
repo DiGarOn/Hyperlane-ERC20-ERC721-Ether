@@ -10,7 +10,18 @@ contract ETH_H {
     uint32 public chainId;
     address public owner;
 
+    mapping( address => uint256 ) private whitelist;
+
     event Transfered(uint256 amount);
+
+    error UnauthorizedAccount(address _msgSender);
+
+    modifier onlyOwner() {
+        if (owner != msg.sender) {
+            revert UnauthorizedAccount(msg.sender);
+        }
+        _;
+    }
 
     constructor (address mailBox_, uint32 chainId_) payable {
         mailBox = IMailbox(mailBox_);
@@ -20,8 +31,24 @@ contract ETH_H {
 
     receive() external payable {}
 
+    function addWhitelisted(address[] memory addresses_) external onlyOwner {
+        for( uint i = 0; i < addresses_.length; i++ ) {
+            whitelist[addresses_[i]] = 1;
+        }
+    }
+
+    function removeWhitelisted(address[] memory addresses_) external onlyOwner {
+        for( uint i = 0; i < addresses_.length; i++ ) {
+            whitelist[addresses_[i]] = 0;
+        }
+    }
+
     function addressToBytes32(address _addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(_addr)));
+    }
+
+    function bytes32ToAddress(bytes32 _addr) internal pure returns (address) {
+        return address(uint160(uint256(_addr)));
     }
 
     function uint_to_bytes(uint256 a, address b) internal pure returns (bytes memory) {
@@ -106,6 +133,8 @@ contract ETH_H {
         bytes calldata body
     ) external {
         require(address(mailBox) == msg.sender);
+        address _sender = bytes32ToAddress(sender);
+        require(whitelist[_sender] == 1, "Not whitelisted");
         (uint256 amount, address recipient) = bytes_to_uint(body);
         require(address(this).balance >= amount);
         payable(recipient).transfer(amount);

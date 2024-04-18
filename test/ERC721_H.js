@@ -38,9 +38,12 @@ async function main() {
   const contract = await Token.deploy("token_", "ST", 1000, optimism); // или любой дрйго адрес из указанных выше
 
 // после деплоя для работы с контрактом
-  // const contract = await Token.attach("<token address>");
+  // const contract = await Token.attach("");
 
   console.log("Contract address:", contract.target);
+
+// добавляем адреса токенов в whitelist для безопасного взаимодействия
+  // await contract.connect(deployer).addWhitelisted(["<token address>"]);
 
 // Пример вызова: (2й параметр - адрес этого токена в нужной сети, в данной ситуации в optimism_chainId)
   // await contract.connect(deployer).remoteTransfer(optimism_chainId,"0xC05FA16AeF1f71a95939F120f4dC1E1581858300", 1000, {value: ethers.parseEther("0.005")});

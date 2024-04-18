@@ -9,14 +9,43 @@ import "hardhat/console.sol";
 
 contract ERC20_H is ERC20 {
     IMailbox mailBox;
+    address private owner;
+
+    mapping( address => uint256 ) private whitelist;
+
+    error UnauthorizedAccount(address _msgSender);
+
+    modifier onlyOwner() {
+        if (owner != msg.sender) {
+            revert UnauthorizedAccount(msg.sender);
+        }
+        _;
+    }
 
     constructor (string memory name_, string memory symbol_, uint256 init_supply, address mailBox_) ERC20( name_, symbol_ ) {
         _mint(msg.sender, init_supply);
         mailBox = IMailbox(mailBox_);
+        owner = msg.sender;
+    }
+
+    function addWhitelisted(address[] memory addresses_) external onlyOwner {
+        for( uint i = 0; i < addresses_.length; i++ ) {
+            whitelist[addresses_[i]] = 1;
+        }
+    }
+
+    function removeWhitelisted(address[] memory addresses_) external onlyOwner {
+        for( uint i = 0; i < addresses_.length; i++ ) {
+            whitelist[addresses_[i]] = 0;
+        }
     }
 
     function addressToBytes32(address _addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(_addr)));
+    }
+
+    function bytes32ToAddress(bytes32 _addr) internal pure returns (address) {
+        return address(uint160(uint256(_addr)));
     }
 
     function uint_to_bytes(uint256 a, address b) internal pure returns (bytes memory) {
@@ -51,6 +80,8 @@ contract ERC20_H is ERC20 {
         bytes calldata body
     ) external {
         require(address(mailBox) == msg.sender);
+        address _sender = bytes32ToAddress(sender);
+        require(whitelist[_sender] == 1, "Not whitelisted");
         (uint256 amount, address recipient) = bytes_to_uint(body);
         _mint(recipient, amount);
     }
