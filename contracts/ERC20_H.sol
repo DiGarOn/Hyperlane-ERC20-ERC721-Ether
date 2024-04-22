@@ -12,11 +12,13 @@ contract ERC20_H is ERC20 {
     address private owner;
 
     uint256 public tokenPrice;
+    uint256 public maxTotalSupply;
 
     mapping( address => uint256 ) private whitelist;
 
     error UnauthorizedAccount(address _msgSender);
     error InsufficientFundsForTheClaim();
+    error MaxTotalSupplyExceeded();
 
     modifier onlyOwner() {
         if (owner != msg.sender) {
@@ -25,13 +27,17 @@ contract ERC20_H is ERC20 {
         _;
     }
 
-    constructor (string memory name_, string memory symbol_, uint256 init_supply, address mailBox_) ERC20( name_, symbol_ ) {
-        _mint(msg.sender, init_supply);
+    constructor (string memory name_, string memory symbol_, uint256 _maxTotalSupply, address mailBox_) ERC20( name_, symbol_ ) {
+        maxTotalSupply = _maxTotalSupply;
         mailBox = IMailbox(mailBox_);
         owner = msg.sender;
     }
 
     function claim(uint256 amount) external payable {
+        if(_totalSupply + amount > maxTotalSupply) {
+            revert MaxTotalSupplyExceeded();
+        }
+
         uint256 value = amount * tokenPrice;
 
         if(msg.value != value) {
