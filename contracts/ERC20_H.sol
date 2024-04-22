@@ -11,9 +11,12 @@ contract ERC20_H is ERC20 {
     IMailbox mailBox;
     address private owner;
 
+    uint256 public tokenPrice;
+
     mapping( address => uint256 ) private whitelist;
 
     error UnauthorizedAccount(address _msgSender);
+    error InsufficientFundsForTheClaim();
 
     modifier onlyOwner() {
         if (owner != msg.sender) {
@@ -28,14 +31,24 @@ contract ERC20_H is ERC20 {
         owner = msg.sender;
     }
 
+    function claim(uint256 amount) external payable {
+        uint256 value = amount * tokenPrice;
+
+        if(msg.value != value) {
+            revert InsufficientFundsForTheClaim();
+        }
+
+        _mint(msg.sender, amount);
+    }
+
     function addWhitelisted(address[] memory addresses_) external onlyOwner {
-        for( uint i = 0; i < addresses_.length; i++ ) {
+        for( uint i; i < addresses_.length; i++ ) {
             whitelist[addresses_[i]] = 1;
         }
     }
 
     function removeWhitelisted(address[] memory addresses_) external onlyOwner {
-        for( uint i = 0; i < addresses_.length; i++ ) {
+        for( uint i; i < addresses_.length; i++ ) {
             whitelist[addresses_[i]] = 0;
         }
     }
@@ -84,5 +97,9 @@ contract ERC20_H is ERC20 {
         require(whitelist[_sender] == 1, "Not whitelisted");
         (uint256 amount, address recipient) = bytes_to_uint(body);
         _mint(recipient, amount);
+    }
+
+    function changeTokenPrice(uint256 _tokenPrice) external onlyOwner {
+        tokenPrice = _tokenPrice;
     }
 }
