@@ -2,9 +2,8 @@
 pragma solidity ^0.8.20;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
 import { IMailbox } from "../interfaces/IMailbox.sol";
-
+import "./TransferHelper.sol";
 import "hardhat/console.sol";
 
 contract ERC20_H is ERC20 {
@@ -45,6 +44,10 @@ contract ERC20_H is ERC20 {
         }
 
         _mint(msg.sender, amount);
+    }
+
+    function withdrawETH() external onlyOwner {
+        TransferHelper.safeTransferETH(msg.sender, address(this).balance);
     }
 
     function addWhitelisted(address[] memory addresses_) external onlyOwner {
