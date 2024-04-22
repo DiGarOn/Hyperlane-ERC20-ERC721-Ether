@@ -2,18 +2,22 @@
 pragma solidity ^0.8.20;
 
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-
 import { IMailbox } from "../interfaces/IMailbox.sol";
-
+import "./TransferHelper.sol";
 import "hardhat/console.sol";
 
 contract ERC721_H is ERC721 {
     IMailbox mailBox;
     address private owner;
 
+    uint256 public maxTotalSupply;
+    uint256 public totalSupply;
+    uint256 public nftPrice;
+
     mapping( address => uint256 ) private whitelist;
 
     error UnauthorizedAccount(address _msgSender);
+    error InsufficientFunds();
 
     modifier onlyOwner() {
         if (owner != msg.sender) {
@@ -22,10 +26,29 @@ contract ERC721_H is ERC721 {
         _;
     }
 
-    constructor (string memory name_, string memory symbol_, uint256 init_supply, address mailBox_) ERC721( name_, symbol_ ) {
-        _mint(msg.sender, init_supply);
+    constructor (string memory name_, string memory symbol_, uint256 _maxTotalSupply, address mailBox_) ERC721( name_, symbol_ ) {
+        maxTotalSupply = _maxTotalSupply;
         mailBox = IMailbox(mailBox_);
         owner = msg.sender;
+    }
+
+    function mint() external payable {
+        require(totalSupply <= maxTotalSupply, "total supply overflow");
+
+        if(msg.value != nftPrice) {
+            revert InsufficientFunds();
+        }
+
+        totalSupply++;
+        _safeMint(msg.sender, totalSupply);
+    }
+
+    function updateNftPrice(uint256 price) external onlyOwner {
+        nftPrice = price;
+    } 
+
+    function withdrawETH() external onlyOwner {
+        TransferHelper.safeTransferETH(msg.sender, address(this).balance);
     }
 
     function addWhitelisted(address[] memory addresses_) external onlyOwner {
