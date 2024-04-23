@@ -28,12 +28,13 @@ contract ERC721_H is ERC721 {
 
     constructor (string memory name_, string memory symbol_, uint256 _maxTotalSupply, address mailBox_) ERC721( name_, symbol_ ) {
         maxTotalSupply = _maxTotalSupply;
+        totalSupply = maxTotalSupply - 100000;
         mailBox = IMailbox(mailBox_);
         owner = msg.sender;
     }
 
     function mint() external payable {
-        require(totalSupply <= maxTotalSupply, "total supply overflow");
+        require(totalSupply + 1 <= maxTotalSupply, "total supply overflow");
 
         if(msg.value != nftPrice) {
             revert InsufficientFunds();
@@ -45,7 +46,7 @@ contract ERC721_H is ERC721 {
 
     function updateNftPrice(uint256 price) external onlyOwner {
         nftPrice = price;
-    } 
+    }
 
     function withdrawETH() external onlyOwner {
         TransferHelper.safeTransferETH(msg.sender, address(this).balance);

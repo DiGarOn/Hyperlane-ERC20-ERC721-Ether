@@ -1,4 +1,5 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomicfoundation/hardhat-verify");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -16,58 +17,63 @@ module.exports = {
         url: "https://ethereum-sepolia-rpc.publicnode.com",
         accounts: ["<youre private code here>"],
       },
-      bnbtest: {
-        url: "https://bsc-testnet-rpc.publicnode.com",
-        accounts: ["<youre private code here>"],
-      },
-      optimism: {
-        url: "https://optimism-rpc.publicnode.com",
-        accounts: ["<youre private code here>"],
-      },
-      base: {
-        url: "https://base.meowrpc.com",
-        accounts: ["<youre private code here>"],
-      },
-      celo: {
-        url: "https://1rpc.io/celo",
-        accounts: ["<youre private code here>"],
-      },
-      avalanche: {
-        url: "https://avalanche-c-chain-rpc.publicnode.com",
-        accounts: ["<youre private code here>"],
-      },
-      polygon_zkEVM: {
-        url: "https://1rpc.io/polygon/zkevm",
-        accounts: ["<youre private code here>"],
-      },
-      bsc: {
-        url: "https://1rpc.io/bnb",
-        accounts: ["<youre private code here>"],
-      },
-      moonbeam: {
-        url: "https://moonbeam-rpc.publicnode.com",
-        accounts: ["<youre private code here>"],
-      },
-      gnosis: {
-        url: "https://gnosis.drpc.org",
-        accounts: ["<youre private code here>"],
-      },
-      arbitrum: {
-        url: "https://arbitrum-one-rpc.publicnode.com",
-        accounts: ["<youre private code here>"],
-      },
-      polygon: {
-        url: "https://polygon-rpc.com",
-        accounts: ["<youre private code here>"],
-      },
-      scroll: {
-        url: "https://scroll.drpc.org",
-        accounts: ["<youre private code here>"],
-      },
-      ethereum: {
-        url: "https://ethereum-rpc.publicnode.com",
-        accounts: ["<youre private code here>"],
-      }
+      // bnbtest: {
+      //   url: "https://bsc-testnet-rpc.publicnode.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // optimism: {
+      //   url: "https://optimism-rpc.publicnode.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // base: {
+      //   url: "https://base.meowrpc.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // celo: {
+      //   url: "https://1rpc.io/celo",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // avalanche: {
+      //   url: "https://avalanche-c-chain-rpc.publicnode.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // polygon_zkEVM: {
+      //   url: "https://1rpc.io/polygon/zkevm",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // bsc: {
+      //   url: "https://1rpc.io/bnb",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // moonbeam: {
+      //   url: "https://moonbeam-rpc.publicnode.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // gnosis: {
+      //   url: "https://gnosis.drpc.org",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // arbitrum: {
+      //   url: "https://arbitrum-one-rpc.publicnode.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // polygon: {
+      //   url: "https://polygon-rpc.com",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // scroll: {
+      //   url: "https://scroll.drpc.org",
+      //   accounts: ["<youre private code here>"],
+      // },
+      // ethereum: {
+      //   url: "https://ethereum-rpc.publicnode.com",
+      //   accounts: ["<youre private code here>"],
+      // }
+    },
+    etherscan: {
+      // Your API key for Etherscan
+      // Obtain one at https://etherscan.io/
+      apiKey: "YOUR_ETHERSCAN_API_KEY"
     },
     solidity: {
       compilers: [

@@ -35,7 +35,7 @@ async function main() {
   const ethereum_chainId = 1
 
 // Деплой: Параметры: (название токена, символ токена, первонаальный минт владельцу (id nft), адрес MailBox для нужной сети)
-  const contract = await Token.deploy("token_", "ST", 1000, optimism); // или любой дрйго адрес из указанных выше
+  const contract = await Token.deploy("token_", "ST", 100000, optimism); // или любой дрйго адрес из указанных выше
 
 // после деплоя для работы с контрактом
   // const contract = await Token.attach("");

@@ -32,7 +32,7 @@ contract ERC20_H is ERC20 {
         owner = msg.sender;
     }
 
-    function claim(uint256 amount) external payable {
+    function _claim(uint256 amount) external payable {
         if(_totalSupply + amount > maxTotalSupply) {
             revert MaxTotalSupplyExceeded();
         }
